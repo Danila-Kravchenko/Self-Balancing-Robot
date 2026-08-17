@@ -76,6 +76,8 @@ void line_by_angle(int wish_speed, int wish_angle) {
 void line_to_cross(int wish_speed){
   while (amounts_of_black < 3) line(wish_speed);
 }
+
+// Основной код выполненияя задания
 void main_task() {
   //муфта
   line_by_dist(500, 800);

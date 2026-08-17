@@ -18,6 +18,7 @@ double check_battery(){
   Serial.println(voltage);
   Serial.println(double(analogRead(VOLTAGE_PIN)) * 5 / 1023);
 
+  //Световая индикация о разряде
   int amounts = 0;
   if (voltage >= 16) amounts = 1;
   else if (voltage >= 15) amounts = 2;

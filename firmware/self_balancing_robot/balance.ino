@@ -6,9 +6,11 @@
 #define KP_SPEED 0.00795  //0.005
 #define KI_SPEED 0.0595  //0.085
 #define iMax_SPEED 14    //12
+#define MAX_ANGLE 14
 
 double rot_comp = 0;
 extern double acceleration(double V_curr, double V_wish, double accel);
+extern double spd;
 
 void set_angle(double wish_angle) {
   static double err, u, p, i = 0, d, err_old = 0;
@@ -31,20 +33,9 @@ void set_angle(double wish_angle) {
   i = constrain(i, -iMax_ANGLE, iMax_ANGLE);
 
   u = p + i + d;
-  Serial.print(angles[0]);
-  // Serial.print("\t");
-  // Serial.print(p);
-  // Serial.print("\t");
-  // Serial.print(i);
-  // Serial.print("\t");
-  // Serial.print(d);*/
-  // Serial.print("\t");
-  Serial.print(spd);
-  Serial.print("\t");
-  Serial.print(u);
-  Serial.println("\t");
-  //Serial.println(center);
 
+  // rot_comp - rotation component
+  // создает разность линейных скоростей на моторах, что позволяет роботу двигаться по окружности
   motor(u + rot_comp, u - rot_comp);
   rot_comp = 0;
 }
@@ -59,7 +50,7 @@ void speed(double wish_speed) {
   i = constrain(i, -iMax_SPEED, iMax_SPEED);
 
   u = p + i;
-  u = constrain(u, -14, 14);
+  u = constrain(u, -MAX_ANGLE, MAX_ANGLE);
 
   set_angle(-0.775 - u);
 }

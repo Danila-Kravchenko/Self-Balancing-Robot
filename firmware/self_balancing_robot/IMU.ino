@@ -4,6 +4,9 @@
 #define BNO_CHIP_ID_REG 0x00
 #define RESET_PIN 24
 
+// angles[0] - pitch (тангаж)
+// angles[1] - yaw (рыскание)
+// angles[2] - roll (крен)
 double gyro[3], angles[3], gyro_angles[3];
 
 void writeReg(uint8_t reg, uint8_t val) {
@@ -36,8 +39,6 @@ void init_wire() {
   //Wire.setClock(400000);  // use 400 kHz I2C
 }
 void init_bno() {
-  //pinMode(RESET_PIN, OUTPUT);
-  digitalWrite(RESET_PIN, HIGH);
   // Проверка связи с датчиком, остановит программу если BNO055 не найден
   uint8_t id;
   readRegs(BNO_CHIP_ID_REG, &id, 1);
@@ -67,6 +68,10 @@ void wait(double ms = Ts) {
   }
   timer = micros();
 }
+
+// angles[0] - pitch (тангаж)
+// angles[1] - yaw (рыскание)
+// angles[2] - roll (крен)
 void update_angle() {
   readBNOData();
   for (int angle = 0; angle < 3; angle++) {

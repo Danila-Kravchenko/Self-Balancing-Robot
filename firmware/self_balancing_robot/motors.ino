@@ -16,6 +16,7 @@
 
 volatile int stepL = 0, stepR = 0;
 int dirL = 1, dirR = 1, distL, distR, center;
+double spd = 0;
 
 void init_motors() {
   pinMode(MOTOR_DIR_L, OUTPUT);
@@ -32,6 +33,7 @@ void init_motors() {
   Timer3.stop();
 }
 
+// Используются прерывания по аппартным таймерам
 void ISR_L() {
   static bool step_state_L = false;
 
@@ -63,6 +65,7 @@ void dist_to_zero() {
   count_dist();
 }
 
+// Увеличение параметра с заданным ускорением
 double acceleration(double V_curr, double V_wish, double accel = ACCEL) {
   static double err;
   err = V_wish - V_curr;
@@ -80,10 +83,6 @@ void motor(double speedL, double speedR) {
   speedR = constrain(speedR, -V_MAX, V_MAX);
   speedL_curr += acceleration(speedL_curr, speedL);
   speedR_curr += acceleration(speedR_curr, speedR);
-
-  /*Serial.print(speedL);
-  Serial.print("\t");
-  Serial.println(speedL_curr);*/
 
   static double k_speed = 0.895;
   spd = spd * k_speed + (1 - k_speed) * (speedL_curr + speedR_curr) / 2;

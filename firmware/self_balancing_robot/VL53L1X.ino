@@ -4,21 +4,18 @@ VL53L1X sensor;
 
 void init_vl53l1x() {
   sensor.setTimeout(500);
-  Serial.println("vl53l1x");
   if (!sensor.init()) {
     Serial.println("Failed to detect and initialize sensor!");
     while (1)
       ;
   }
-  Serial.println("goida");
-
+  // BNO-055 и VL53L1X имеют одинаковый адресс
+  // Меняем во избежание конфликтов
   sensor.setAddress(0x28);
   sensor.setDistanceMode(VL53L1X::Long);
   sensor.setMeasurementTimingBudget(10000);
-  Serial.println("goida");
 
   sensor.startContinuous(10);
-  Serial.println("goida");
 }
 int get_dist() {
   static uint32_t timer = micros();
@@ -30,5 +27,5 @@ int get_dist() {
   filtr = k_dist * filtr + (1 - k_dist) * dist;
 
   last_dist = filtr;
-  return filtr;  //get_dist();
+  return filtr;
 }
